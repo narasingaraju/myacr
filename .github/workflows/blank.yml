@@ -24,6 +24,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: azure/docker-login@v1
+        with:
+          login-server: testreg123456789.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build . -t testreg123456789.azurecr.io/myapp:${{ github.sha }}
+          docker push testreg123456789.azurecr.io/myapp:${{ github.sha }}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
